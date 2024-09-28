@@ -1,0 +1,32 @@
+{
+    "job_profiles": {
+      "data_jobs": {
+        "include_total_results": false,
+        "order_by": [
+          {
+            "desc": true,
+            "field": "date_posted"
+          }
+        ],
+        "posted_at_max_age_days": 15,
+        "job_country_code_or": [
+          "CA"
+        ],
+        "job_title_or": [
+          "Data Architect",
+          "Business Intelligence (BI) Developer/Analyst",
+          "Solutions Architect",
+          "Data Integration Specialist",
+          "Data Engineer",
+          "Analytics Engineer",
+          "Database Developer/Administrator",
+          "Technical Team Lead/Manager",
+          "Cloud Engineer",
+          "Data Manager"
+        ],
+        "page": 0,
+        "limit": 10,
+        "blur_company_data": false
+      }
+    }
+  }
