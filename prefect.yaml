@@ -1,0 +1,73 @@
+name: job-searcher
+prefect-version: "3.0.0"
+build: null
+push: null
+pull:
+  - prefect.deployments.steps.set_working_directory:
+      directory: /opt/prefect
+
+deployments:
+
+  - name: load-jobs
+    version: "1.0.0"
+    tags: ["jobs", "scrape", "queue"]
+    description: "Scrape 100 jobs from 5 boards, dedup via dbt, push to llm-queue"
+    entrypoint: main.py:load_jobs_flow
+    parameters:
+      title: "data engineer"
+      location: "Toronto, ON"
+      profile: "Slava"
+      searches: 100
+    schedule:
+      cron: "0 0 * * *"
+      timezone: "America/Toronto"
+    work_pool:
+      name: dev-pool-docker
+      work_queue_name: default
+      job_variables:
+        image: "job-searcher:latest"
+        image_pull_policy: "Never"
+        networks: ["project-hub-network"]
+        working_dir: "/opt/prefect"
+        env:
+          PREFECT_API_URL: "http://prefect-server-dev:4200/api"
+          DB_HOST: "{{ prefect.blocks.secret.job-searcher--database-host }}"
+          DB_PORT: "{{ prefect.blocks.secret.job-searcher--database-port }}"
+          DB_USER: "{{ prefect.blocks.secret.job-searcher--database-user }}"
+          DB_PASSWORD: "{{ prefect.blocks.secret.job-searcher--database-password }}"
+          DB_NAME: "{{ prefect.blocks.secret.job-searcher--database-name }}"
+          TELEGRAM_BOT_TOKEN: "{{ prefect.blocks.secret.job-searcher--telegram-bot-token }}"
+          LLM_QUEUE_DSN: "{{ prefect.blocks.secret.job-searcher--llm-queue-dsn }}"
+          LLM_QUEUE_TOPIC: "job_eval"
+          LLM_QUEUE_WORKER_URL: "http://llm-queue-worker:8080"
+
+  - name: notify-matches
+    version: "1.0.0"
+    tags: ["jobs", "notify"]
+    description: "Drain llm-queue results into evaluated_jobs, send top 10 to Telegram"
+    entrypoint: main.py:notify_matches_flow
+    parameters:
+      profile: "Slava"
+      min_score: 6.9
+    schedule:
+      cron: "0 8 * * *"
+      timezone: "America/Toronto"
+    work_pool:
+      name: dev-pool-docker
+      work_queue_name: default
+      job_variables:
+        image: "job-searcher:latest"
+        image_pull_policy: "Never"
+        networks: ["project-hub-network"]
+        working_dir: "/opt/prefect"
+        env:
+          PREFECT_API_URL: "http://prefect-server-dev:4200/api"
+          DB_HOST: "{{ prefect.blocks.secret.job-searcher--database-host }}"
+          DB_PORT: "{{ prefect.blocks.secret.job-searcher--database-port }}"
+          DB_USER: "{{ prefect.blocks.secret.job-searcher--database-user }}"
+          DB_PASSWORD: "{{ prefect.blocks.secret.job-searcher--database-password }}"
+          DB_NAME: "{{ prefect.blocks.secret.job-searcher--database-name }}"
+          TELEGRAM_BOT_TOKEN: "{{ prefect.blocks.secret.job-searcher--telegram-bot-token }}"
+          LLM_QUEUE_DSN: "{{ prefect.blocks.secret.job-searcher--llm-queue-dsn }}"
+          LLM_QUEUE_TOPIC: "job_eval"
+          LLM_QUEUE_WORKER_URL: "http://llm-queue-worker:8080"
