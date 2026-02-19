@@ -1,0 +1,12 @@
+data__job_searcher:
+  outputs:
+    dev:
+      dbname: job_searcher
+      host: "{{ env_var('DB_HOST') }}"
+      pass: "{{ env_var('DB_PASSWORD') }}"
+      port: 5432
+      schema: public
+      threads: 8
+      type: postgres
+      user: user_job_searcher
+  target: dev

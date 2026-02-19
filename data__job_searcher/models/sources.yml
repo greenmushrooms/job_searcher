@@ -1,0 +1,4 @@
+sources:
+  - name: jobspy
+    tables:
+      - name: import_jobs

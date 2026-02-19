@@ -1,0 +1,28 @@
+[project]
+name = "job-searcher"
+version = "1.0.0"
+description = "Job search pipeline with local LLM evaluation via llm-queue"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "prefect>=3.4.24",
+    "pandas",
+    "requests",
+    "python-jobspy",
+    "prefect-dbt>=0.7.0",
+    "sqlalchemy",
+    "beautifulsoup4",
+    "lxml",
+    "psycopg2-binary==2.9.9",
+    "dbt-postgres>=1.8.1",
+    "llm-queue @ git+https://github.com/greenmushrooms/llm-queue.git#subdirectory=client",
+]
+
+[tool.uv]
+override-dependencies = [
+    "psycopg2-binary==2.9.9",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
