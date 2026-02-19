@@ -7,7 +7,6 @@ RUN apt-get update && \
 WORKDIR /opt/prefect
 
 RUN pip install --no-cache-dir \
-    "prefect>=3.4.24" \
     pandas \
     requests \
     python-jobspy \
@@ -16,7 +15,6 @@ RUN pip install --no-cache-dir \
     beautifulsoup4 \
     lxml \
     "psycopg2-binary==2.9.9" \
-    "dbt-postgres>=1.8.1" \
-    psycopg2-binary
+    "dbt-postgres>=1.8.1"
 
 COPY . /opt/prefect/

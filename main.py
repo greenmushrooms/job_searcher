@@ -222,7 +222,7 @@ def load_jobs_flow(
     sys_run_name = runtime.flow_run.name
 
     jobs = scrape_jobs(
-        site_name=["indeed", "linkedin", "glassdoor", "google", "ziprecruiter"],
+        site_name=["indeed", "linkedin", "glassdoor", "google"],
         search_term=title,
         google_search_term=f"{title} jobs near {location} since yesterday",
         location=location,
