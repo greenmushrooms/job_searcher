@@ -15,13 +15,22 @@ dependencies = [
     "lxml",
     "psycopg2-binary==2.9.9",
     "dbt-postgres>=1.8.1",
-    "llm-queue @ git+https://github.com/greenmushrooms/llm-queue.git#subdirectory=client",
+    "llm-queue",
 ]
 
 [tool.uv]
 override-dependencies = [
     "psycopg2-binary==2.9.9",
 ]
+
+[tool.uv.sources]
+llm-queue = { git = "https://github.com/greenmushrooms/llm-queue.git", subdirectory = "client" }
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
 
 [build-system]
 requires = ["hatchling"]
