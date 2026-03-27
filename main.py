@@ -261,7 +261,7 @@ def get_top_jobs(profile: str, min_score: float = 6.9, limit: int = 10):
           AND e.sys_run_name = (
               SELECT sys_run_name FROM public.evaluated_jobs
               WHERE sys_profile = :profile
-              ORDER BY id DESC LIMIT 1
+              ORDER BY job_id DESC LIMIT 1
           )
         ORDER BY e.avg_score DESC
         LIMIT :limit
@@ -298,7 +298,7 @@ def notify_matches_flow(profile: str = "default", min_score: float = 6.9):
         with get_db_engine().connect() as conn:
             row = conn.execute(text(
                 "SELECT sys_run_name FROM public.evaluated_jobs "
-                "WHERE sys_profile = :p ORDER BY id DESC LIMIT 1"
+                "WHERE sys_profile = :p ORDER BY job_id DESC LIMIT 1"
             ), {"p": profile}).fetchone()
         run_name = row[0] if row else runtime.flow_run.name
         send_telegram_notifications(jobs, run_name, chat_id)

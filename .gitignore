@@ -6,3 +6,5 @@ venv/
 data__job_searcher/target/
 data__job_searcher/logs/
 data__job_searcher/dbt_packages/
+data__job_searcher/profiles.yml
+data__job_searcher/.user.yml
